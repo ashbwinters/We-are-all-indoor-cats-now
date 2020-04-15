@@ -13,21 +13,27 @@ class Cli < ActiveRecord::Base
         main_menu(player)
     end
 
-    def self.main_menu(player)
+    def self.family_or_adult(player)
         puts "#{player.name}, would you like a family-friendly game? (Y/n)"
         player_choice = gets.chomp.downcase
+        add_choice_to_table(player, family_friendly, player_choice)
         game_choices(player, player_choice)
     end
 
-    def self.game_choices(player, choice)
+    def self.game_choices(player, attribute, choice)
+        user = Player.find_by(player_id: )  
         if choice == 'n'
             puts "#{player.name}, here are appropriate game choices for adults."
         elsif choice == 'y'
             puts "#{player.name}, here are appropriate game choices for families."
         else
             puts "Invalid choice."
-            main_menu(player)
+            family_or_adult(player)
         end
     end
 
+    def self.results
+        puts "There are currently COUNT games to choose from. Would you like to narrow that down? (Y/n)"
+        player_choice = gets.chomp.downcase
+    end
 end

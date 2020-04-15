@@ -11,6 +11,8 @@ class CreateGamesTable < ActiveRecord::Migration[6.0]
       t.boolean :competative
       t.integer :learning_curve
       t.boolean :family_friendly
+      t.boolean :expansions
+      t.text :description
     end
   end
 end

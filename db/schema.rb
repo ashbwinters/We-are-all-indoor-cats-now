@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_14_183456) do
+ActiveRecord::Schema.define(version: 2020_04_15_044150) do
 
   create_table "games", force: :cascade do |t|
     t.text "name"
@@ -23,6 +23,8 @@ ActiveRecord::Schema.define(version: 2020_04_14_183456) do
     t.boolean "competative"
     t.integer "learning_curve"
     t.boolean "family_friendly"
+    t.boolean "expansions"
+    t.text "description"
   end
 
   create_table "players", force: :cascade do |t|

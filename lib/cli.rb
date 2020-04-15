@@ -1,4 +1,4 @@
-class Cli
+class Cli #< ActiveRecord::Base
     attr_reader :player
 
     def welcome
@@ -9,7 +9,7 @@ class Cli
     end
 
     def set_player(player_name)
-        @player = Player.new(player_name)
+        player_name = Player.create(player_name)
         main_menu
     end
 

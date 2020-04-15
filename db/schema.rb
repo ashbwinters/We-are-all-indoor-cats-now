@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_15_044150) do
+ActiveRecord::Schema.define(version: 2020_04_15_185504) do
 
   create_table "games", force: :cascade do |t|
     t.text "name"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2020_04_15_044150) do
     t.boolean "competative"
     t.boolean "family_friendly"
     t.integer "session_time"
+    t.string "name"
   end
 
 end

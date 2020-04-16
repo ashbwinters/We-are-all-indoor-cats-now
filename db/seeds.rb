@@ -1,7 +1,4 @@
-Player.new({
-    
-})
-
+Game.destroy_all
 
 
 

@@ -51,10 +51,11 @@ class Cli
         if choice == 'n'
             puts "So game night has a keg eh? Fair enough."
             results = Game.where family_friendly: false
-            binding.pry
+            display_results(results)
         elsif choice == 'y'
             puts "Gam Gam isn't a fan of cursing I guess. Fine."
             results = Game.where family_friendly: true
+            display_results(results)
         else
             puts "This isn't rocket science, y'know. Try again."
             family_vs_adult
@@ -89,8 +90,12 @@ class Cli
         end
     end
 
-    def results
+    def display_results(games)
         puts "Right. Here you go."
+        binding.pry
+        games.each do |game|
+            puts game.name
+        end
     end
 
     def play_the_game

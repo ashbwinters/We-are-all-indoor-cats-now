@@ -60,8 +60,18 @@ class Cli
             puts "This isn't rocket science, y'know. Try again."
             family_vs_adult
         end
-        puts "You have "
-        refine_further
+        # puts "You have "
+        # refine_further
+        pick_a_game
+    end
+
+    def pick_a_game
+        puts "So what'll it be?"
+        puts "Enter the name of the game you want to play."
+        response = gets.chomp.downcase.titleize
+        choice = Game.find_by(name: response)
+        
+        play_the_game(choice)
     end
 
     def refine_further
@@ -92,7 +102,6 @@ class Cli
 
     def display_results(games)
         puts "Right. Here you go."
-        binding.pry
         games.each do |game|
             puts game.name
         end

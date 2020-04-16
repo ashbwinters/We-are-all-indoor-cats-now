@@ -2,14 +2,14 @@ require 'pry'
 class Cli
     attr_reader :player
 
-    def self.welcome
+    def welcome
         puts "Do I know you?"
         puts "(yes/no)"
         response = gets.chomp.downcase
         new_or_returning_user(response)
     end
 
-    def self.new_or_returning_user(response)
+    def new_or_returning_user(response)
         if response == 'no'
             puts "Well I can't just call you Bob now can I?" 
             set_player
@@ -22,45 +22,48 @@ class Cli
         end
     end
 
-    def self.set_player
+    def set_player
         puts "So what's your first name?"
         first_name = gets.chomp.downcase.capitalize
         puts "I already know three #{first_name}'s. What's your last name?"
         last_name = gets.chomp.downcase.capitalize
-        new_player = Player.create(name: "#{first_name} #{last_name}")
-        family_vs_adult(new_player)
+        @player = Player.create(name: "#{first_name} #{last_name}")
+        family_vs_adult
     end
 
-    def self.find_player
+    def find_player
         puts "Remind me what your first name is again?"
         first_name = gets.chomp.downcase.capitalize
         puts "Not ringing a bell. What's your last name?"
         last_name = gets.chomp.downcase.capitalize
-        returning_player = Player.find_by name: "#{first_name} #{last_name}"
-        family_vs_adult(returning_player)
+        @player = Player.find_by name: "#{first_name} #{last_name}"
+        family_vs_adult
     end
 
-    def self.family_vs_adult(player)
+    def family_vs_adult
         puts "Your name is #{player.name}?! Oh man, your parents didn't like you did they?"
         puts "Speaking of parents, would you like a family-friendly game? (Y/n)"
         player_choice = gets.chomp.downcase
-        game_options(player, player_choice)
+        game_options(player_choice)
     end
 
-    def self.game_options(player, choice)
+    def game_options(choice)
         if choice == 'n'
             puts "So game night has a keg eh? Fair enough."
-
+            results = Game.where family_friendly: false
+            binding.pry
         elsif choice == 'y'
             puts "Gam Gam isn't a fan of cursing I guess. Fine."
+            results = Game.where family_friendly: true
         else
             puts "This isn't rocket science, y'know. Try again."
-            family_vs_adult(player)
+            family_vs_adult
         end
+        puts "You have "
         refine_further
     end
 
-    def self.refine_further
+    def refine_further
         puts "Really? You want me to do more work? Well you aren't having a game night by yourself are you?"
         puts "How many people are playing?"
         puts "a) Just me and a friend."
@@ -71,7 +74,7 @@ class Cli
         game_options_refined(response)
     end
 
-    def self.game_options_refined(response)
+    def game_options_refined(response)
         if response == "a"
             puts "You have a friend. That's suprising."
         elsif response == 'b'
@@ -86,21 +89,21 @@ class Cli
         end
     end
 
-    def self.results
+    def results
         puts "Right. Here you go."
     end
 
-    def self.play_the_game
+    def play_the_game
         puts "You chose that one? Interesting... I'm just going to make a note... No it's not about you!"
     end
 
-    def self.thumbs_up_or_down
+    def thumbs_up_or_down
         puts "Well how else am I going to know if you liked the game? Just... yes or no."
         puts "(y) I freakin' LOVE this game!"
         puts "(n) HOW DARE YOU RECOMMEND THIS GAME TO OTHERS!"
     end
 
-    def self.change_your_mind
+    def change_your_mind
         puts "Having second thoughts eh? Yeah, so am I."
         puts "(y) Maybe I was too harsh..."
         puts "(n) I still hate it. I just wanted to mess with you." 

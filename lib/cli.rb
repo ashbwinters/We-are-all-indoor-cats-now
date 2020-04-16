@@ -1,6 +1,6 @@
 require 'pry'
 class Cli
-    attr_reader :player
+    attr_reader :player, :board_game
 
     def welcome
         puts "Do I know you?"
@@ -27,7 +27,8 @@ class Cli
         first_name = gets.chomp.downcase.capitalize
         puts "I already know three #{first_name}'s. What's your last name?"
         last_name = gets.chomp.downcase.capitalize
-        @player = Player.create(name: "#{first_name} #{last_name}")
+        @player = Player.find_or_create_by(name: "#{first_name} #{last_name}")
+        puts "Your name is #{player.name}?! Oh man, your parents didn't like you did they? Speaking of parents..."
         family_vs_adult
     end
 
@@ -36,18 +37,20 @@ class Cli
         first_name = gets.chomp.downcase.capitalize
         puts "Not ringing a bell. What's your last name?"
         last_name = gets.chomp.downcase.capitalize
-        @player = Player.find_by name: "#{first_name} #{last_name}"
+        @player = Player.find_or_create_by name: "#{first_name} #{last_name}"
+        puts "Your name is #{player.name}?! Oh man, your parents didn't like you did they? Speaking of parents..."
         family_vs_adult
     end
 
     def family_vs_adult
-        puts "Your name is #{player.name}?! Oh man, your parents didn't like you did they?"
-        puts "Speaking of parents, would you like a family-friendly game? (Y/n)"
+        puts "Would you like a family-friendly game?"
+        puts "(y) I was born a family man!"
+        puts "(n) Who needs family when you have booze?"
         player_choice = gets.chomp.downcase
-        game_options(player_choice)
+        family_friendly_options(player_choice)
     end
 
-    def game_options(choice)
+    def family_friendly_options(choice)
         if choice == 'n'
             puts "So game night has a keg eh? Fair enough."
             results = Game.where family_friendly: false
@@ -60,21 +63,10 @@ class Cli
             puts "This isn't rocket science, y'know. Try again."
             family_vs_adult
         end
-        # puts "You have "
-        # refine_further
         pick_a_game
     end
 
-    def pick_a_game
-        puts "So what'll it be?"
-        puts "Enter the name of the game you want to play."
-        response = gets.chomp.downcase.titleize
-        choice = Game.find_by(name: response)
-        
-        play_the_game(choice)
-    end
-
-    def refine_further
+    def refine_by_players
         puts "Really? You want me to do more work? Well you aren't having a game night by yourself are you?"
         puts "How many people are playing?"
         puts "a) Just me and a friend."
@@ -82,10 +74,10 @@ class Cli
         puts "c) Unless Greg shows up, then it's five."
         puts "d) But Laura's been trying to set Greg up with her friend and ... wait how many people are playing now?"
         response = gets.chomp.downcase
-        game_options_refined(response)
+        filtered_by_number_of_players(response)
     end
 
-    def game_options_refined(response)
+    def filtered_by_number_of_players(response)
         if response == "a"
             puts "You have a friend. That's suprising."
         elsif response == 'b'
@@ -96,7 +88,7 @@ class Cli
             puts "Well that escalated quickly, didn't it."
         else
             puts "We've discussed this already. Try again."
-            refine_further
+            refine_by_players
         end
     end
 
@@ -105,10 +97,26 @@ class Cli
         games.each do |game|
             puts game.name
         end
+        pick_a_game
+    end
+
+    def pick_a_game
+        puts "So what'll it be?"
+        puts "Enter the name of the game you want to play."
+        response = gets.chomp.downcase.titleize
+        @board_game = Game.find_by(name: response)
+        if response == nil
+            puts "I gave you options. Pick one."
+            pick_a_game
+        end
+        play_the_game
     end
 
     def play_the_game
-        puts "You chose that one? Interesting... I'm just going to make a note... No it's not about you!"
+        puts "You chose that one? Interesting... I'm just going to make a note... No, it's not about you and no, you can't see it!"
+        player.reviews << board_game
+        binding.pry
+        ############
     end
 
     def thumbs_up_or_down

@@ -27,7 +27,7 @@ class Cli
         first_name = gets.chomp.downcase.capitalize
         puts "I already know three #{first_name}'s. What's your last name?"
         last_name = gets.chomp.downcase.capitalize
-        @player = Player.create(name: "#{first_name} #{last_name}")
+        @player = Player.find_or_create_by(name: "#{first_name} #{last_name}")
         family_vs_adult
     end
 
@@ -36,13 +36,15 @@ class Cli
         first_name = gets.chomp.downcase.capitalize
         puts "Not ringing a bell. What's your last name?"
         last_name = gets.chomp.downcase.capitalize
-        @player = Player.find_by name: "#{first_name} #{last_name}"
+        @player = Player.find_or_create_by name: "#{first_name} #{last_name}"
+        puts "Your name is #{player.name}?! Oh man, your parents didn't like you did they? Speaking of parents..."
         family_vs_adult
     end
 
     def family_vs_adult
-        puts "Your name is #{player.name}?! Oh man, your parents didn't like you did they?"
-        puts "Speaking of parents, would you like a family-friendly game? (Y/n)"
+        puts "Would you like a family-friendly game?"
+        puts "(y) I was born a family man!"
+        puts "(n) Who needs family when you have booze?"
         player_choice = gets.chomp.downcase
         game_options(player_choice)
     end
@@ -108,7 +110,7 @@ class Cli
     end
 
     def play_the_game
-        puts "You chose that one? Interesting... I'm just going to make a note... No it's not about you!"
+        puts "You chose that one? Interesting... I'm just going to make a note... No, it's not about you and no, you can't see it!"
     end
 
     def thumbs_up_or_down

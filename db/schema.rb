@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_15_185504) do
+ActiveRecord::Schema.define(version: 2020_04_16_164321) do
 
   create_table "games", force: :cascade do |t|
     t.text "name"
@@ -28,12 +28,17 @@ ActiveRecord::Schema.define(version: 2020_04_15_185504) do
   end
 
   create_table "players", force: :cascade do |t|
-    t.integer "num_players"
-    t.integer "youngest_age"
-    t.boolean "competative"
-    t.boolean "family_friendly"
-    t.integer "session_time"
     t.string "name"
   end
 
+  create_table "reviews", force: :cascade do |t|
+    t.boolean "rating"
+    t.integer "game_id"
+    t.integer "player_id"
+    t.index ["game_id"], name: "index_reviews_on_game_id"
+    t.index ["player_id"], name: "index_reviews_on_player_id"
+  end
+
+  add_foreign_key "reviews", "games"
+  add_foreign_key "reviews", "players"
 end

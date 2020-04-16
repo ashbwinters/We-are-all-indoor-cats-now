@@ -1,7 +1,4 @@
-Player.new({
-    
-})
-
+Game.destroy_all
 
 
 
@@ -51,7 +48,7 @@ Player.new({
 
 
 catan = Game.create(
-    name: "Settlers of Catan",
+    name: "Settlers Of Catan",
     players_min: 3,
     players_max: 4,
     setup_time: 5,
@@ -88,7 +85,7 @@ cards_against = Game.create(
 )
 
 ticket_to_ride = Game.create(
-    name: "Ticket to Ride",
+    name: "Ticket To Ride",
     players_min: 2,
     players_max: 5,
     setup_time: 5,

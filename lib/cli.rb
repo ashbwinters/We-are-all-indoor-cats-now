@@ -63,7 +63,7 @@ class Cli
             puts "This isn't rocket science, y'know. Try again."
             family_vs_adult
         end
-#        refine_by_players
+        pick_a_game
     end
 
     def refine_by_players

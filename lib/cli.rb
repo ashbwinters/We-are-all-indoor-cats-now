@@ -63,7 +63,7 @@ class Cli
             puts "This isn't rocket science, y'know. Try again."
             family_vs_adult
         end
-        pick_a_game
+        # pick_a_game
     end
 
     def refine_by_players
@@ -80,6 +80,7 @@ class Cli
     def filtered_by_number_of_players(response)
         if response == "a"
             puts "You have a friend. That's suprising."
+            User.where("players_min", 2)
         elsif response == 'b'
             puts "Ah, the double date for nerds."
         elsif response == 'c'
@@ -114,15 +115,28 @@ class Cli
 
     def play_the_game
         puts "You chose that one? Interesting... I'm just going to make a note... No, it's not about you and no, you can't see it!"
-        player.reviews << board_game
-        binding.pry
-        ############
+        thumbs_up_or_down
     end
 
     def thumbs_up_or_down
         puts "Well how else am I going to know if you liked the game? Just... yes or no."
         puts "(y) I freakin' LOVE this game!"
         puts "(n) HOW DARE YOU RECOMMEND THIS GAME TO OTHERS!"
+        response = gets.chomp.downcase
+        if response == "y"
+            Review.create(rating: true, player_id: player.id, game_id: board_game.id)
+        # 
+
+        end
+        puts "Would you like to see your reviews?"
+        see_my_reviews
+    end
+
+    def see_my_reviews
+        player.reviews.each do |review|
+            puts "#{review.game.name} would recommend? #{review.rating}"
+        end
+        
     end
 
     def change_your_mind

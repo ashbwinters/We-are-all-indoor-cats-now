@@ -11,3 +11,5 @@ Ruby with a SQLite3 database used.
 ![mp4_3 demonstrating use of app](img/Bored_game_3.gif)
 
 ![mp4_4 demonstrating use of app](img/Bored_game_4.gif)
+
+![mp4_5 demonstrating use of app](img/Bored_game_5.gif)

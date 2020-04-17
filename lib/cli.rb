@@ -5,16 +5,16 @@ class Cli
     def welcome
         puts "Do I know you?"
         puts "(y) I thought we were friends!"
-        puts "(n) Not tat I know of."
+        puts "(n) Not that I know of."
         response = gets.chomp.downcase
         new_or_returning_user(response)
     end
 
     def new_or_returning_user(response)
-        if response == 'no'
+        if response == 'n'
             puts "Well I can't just call you Bob now can I?" 
             set_player
-        elsif response == 'yes'
+        elsif response == 'y'
             puts "Well it's not like you're a celebrity or anything."
             find_player
         else
@@ -114,7 +114,7 @@ class Cli
 
     def reviews_query
         puts "You want to see all of your recommendations don't you?"
-        puts "(y) Now that you mention it..."
+        puts "(y) Now that you've mentioned it..."
         puts "(n) Why would I want to do that?"
         response = gets.chomp.downcase
         if response == "y"
@@ -155,19 +155,29 @@ class Cli
         puts "Fine. Which review do you want to change?"
         puts "<Enter Game>"
         response = gets.chomp.downcase.titleize
-        board_game = Game.find_by(name: response)
+        @board_game = Game.find_by(name: response)
         if board_game == nil
             puts "Seriously? Pick one."
             pick_a_review
         else
-            puts "Ok then... "
-            change_review(board_game)
+            find_review_that_needs_changing
         end 
     end
 
-    def change_review(game)
+    def find_review_that_needs_changing
+        @review = Review.where(player_id: player.id).where game_id: board_game.id
+        binding.pry
+        if review == nil
+            puts "You didn't even... Just... Try again."
+            pick_a_review
+        else
+            puts "Ok then... "
+            change_review
+        end 
+    end
+
+    def change_review
         response = thumbs_up_or_down
-        @review = Review.find_by player_id: player.id, :game_id game.id
         if response == "y"
             review.update(rating: true)
         elsif response == 'n'

@@ -3,6 +3,9 @@ class Cli
     attr_reader :player, :board_game, :review
 
     def welcome
+        puts "WELOME TO THE BORED GAME GUIDE"
+        puts " "
+        puts " "
         puts "Do I know you?"
         puts "(y) I thought we were friends!"
         puts "(n) Not that I know of."
@@ -136,6 +139,7 @@ class Cli
         puts "(y) Now that you've mentioned it..."
         puts "(n) Why would I want to do that?"
         response = gets.chomp.downcase
+        system 'clear'
         if response == "y"
             see_my_reviews
         elsif response == 'n'
@@ -148,6 +152,7 @@ class Cli
 
     def see_my_reviews
         player.reviews.each do |review|
+            puts " "
             puts "I would recommend #{review.game.name} to others: #{review.rating}"
             puts " "
         end
@@ -191,8 +196,6 @@ class Cli
             puts "You didn't even... Just... Try again."
             pick_a_review
         else
-            system 'clear'
-            puts "Ok then... "
             change_review
         end 
     end
@@ -207,6 +210,8 @@ class Cli
             puts "I don't know why this is so hard for you. Try again."
             change_review
         end
+        system 'clear'
+        puts "Alright. It's changed..."
         end_session
     end
 

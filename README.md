@@ -9,4 +9,4 @@ Produced with Ruby and ActiveRecord and includes SQLite3 databases.
 
 This App will reluctantly give you game night suggestions and let you recommend them to others. Currently, players can store, view and change  their game night recommendations. Since this information is stored in it's database, future versions could make it possible to see and sort games by other player's recommendations.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/a386MH86iGA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+https://www.youtube.com/embed/a386MH86iGA

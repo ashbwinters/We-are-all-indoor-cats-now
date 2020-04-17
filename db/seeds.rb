@@ -59,12 +59,7 @@ catan = Game.create(
     learning_curve: 5,
     family_friendly: 1,
     expansions: 1,
-    description: "Picture yourself in the era of discoveries: 
-        after a long voyage of great deprivation, 
-        your ships have finally reached the coast of an uncharted island. 
-        Its name shall be Catan! But you are not the only discoverer. 
-        Other fearless seafarers have also landed on the shores of Catan: 
-        the race to settle the island has begun!"
+    description: "Picture yourself in the era of discoveries: after a long voyage of great deprivation, your ships have finally reached the coast of an uncharted island. Its name shall be Catan! But you are not the only discoverer. Other fearless seafarers have also landed on the shores of Catan: the race to settle the island has begun!"
 )
 
 cards_against = Game.create(
@@ -79,9 +74,7 @@ cards_against = Game.create(
     learning_curve: 3,
     family_friendly: 0,
     expansions: 1,
-    description: "Cards Against Humanity is a party game for horrible people. 
-        Unlike most of the party games you've played before, 
-        Cards Against Humanity is as despicable and awkward as you and your friends."
+    description: "Cards Against Humanity is a party game for horrible people. Unlike most of the party games you've played before, Cards Against Humanity is as despicable and awkward as you and your friends."
 )
 
 ticket_to_ride = Game.create(
@@ -96,9 +89,7 @@ ticket_to_ride = Game.create(
     learning_curve: 3,
     family_friendly: 1,
     expansions: 0,
-    description: "Ticket to Ride is a cross-country train adventure 
-        in which players collect and play matching train cards to claim railway routes 
-        connecting cities throughout North America."
+    description: "Ticket to Ride is a cross-country train adventure in which players collect and play matching train cards to claim railway routes connecting cities throughout North America."
 )
 
 unstable_unicorns = Game.create(
@@ -128,9 +119,7 @@ munchkin = Game.create(
     learning_curve: 4,
     family_friendly: 1,
     expansions: 1,
-    description: "Go down in the dungeon. Kill everything you meet. 
-        Backstab your friends and steal their stuff. Grab the treasure and run. 
-        Admit it. You love it."
+    description: "Go down in the dungeon. Kill everything you meet. Backstab your friends and steal their stuff. Grab the treasure and run. Admit it. You love it."
 )
 
 gloomhaven = Game.create(

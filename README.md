@@ -6,4 +6,8 @@ Ruby with a SQLite3 database used.
 
 ![mp4_1 demonstrating use of app](img/Bored_game_1.gif)
 
-![mp4_2 demonstrating use of app](img/Bored_game_1.gif)
+![mp4_2 demonstrating use of app](img/Bored_game_2.gif)
+
+![mp4_3 demonstrating use of app](img/Bored_game_3.gif)
+
+![mp4_4 demonstrating use of app](img/Bored_game_4.gif)

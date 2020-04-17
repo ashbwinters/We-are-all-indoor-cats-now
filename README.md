@@ -4,4 +4,6 @@ Are you having a game night but don't know what game to play? Let our unamused s
 
 Ruby with a SQLite3 database used.
 
-![mp4 demonstrating use of app](img/Bored_game_1.gif)
+![mp4_1 demonstrating use of app](img/Bored_game_1.gif)
+
+![mp4_2 demonstrating use of app](img/Bored_game_1.gif)

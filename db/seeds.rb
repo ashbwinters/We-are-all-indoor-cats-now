@@ -1,4 +1,28 @@
-Game.destroy_all
+# Player Seeds
+
+player1 = Player.create(
+    name: "Lynn Amsbury"
+)
+
+player2 = Player.create(
+    name: "Ashley Winters"
+)
+
+player3 = Player.create(
+    name: "Bob Winters"
+)
+
+player4 = Player.create(
+    name: "Lizzie Borden"
+)
+
+player5 = Player.create(
+    name: "Freddie Krueger"
+)
+
+player6 = Player.create(
+    name: "Harley Quinn"
+)
 
 
 
@@ -23,29 +47,7 @@ Game.destroy_all
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Game Seeds
 
 catan = Game.create(
     name: "Settlers Of Catan",

@@ -1,4 +1,4 @@
-# Player Seeds
+Player.destroy_all
 
 player1 = Player.create(
     name: "Lynn Amsbury"

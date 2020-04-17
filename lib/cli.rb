@@ -7,6 +7,7 @@ class Cli
         puts "(y) I thought we were friends!"
         puts "(n) Not that I know of."
         response = gets.chomp.downcase
+        system 'clear'
         new_or_returning_user(response)
     end
 
@@ -29,6 +30,7 @@ class Cli
         puts "I already know three #{first_name}'s. What's your last name?"
         last_name = gets.chomp.downcase.capitalize
         @player = Player.find_or_create_by(name: "#{first_name} #{last_name}")
+        system 'clear'
         puts "Your name is #{player.name}?! Oh man, your parents didn't like you did they? Speaking of parents..."
         family_vs_adult
     end
@@ -39,6 +41,7 @@ class Cli
         puts "Not ringing a bell. What's your last name?"
         last_name = gets.chomp.downcase.capitalize
         @player = Player.find_or_create_by name: "#{first_name} #{last_name}"
+        system 'clear'
         puts "Your name is #{player.name}?! Oh man, your parents didn't like you did they? Speaking of parents..."
         family_vs_adult
     end
@@ -48,16 +51,19 @@ class Cli
         puts "(y) I was born a family man!"
         puts "(n) Who needs family when you have booze?"
         player_choice = gets.chomp.downcase
+        system 'clear'
         family_friendly_options(player_choice)
     end
 
     def family_friendly_options(choice)
         if choice == 'n'
             puts "So game night has a keg eh? Fair enough."
+            puts " "
             results = Game.where family_friendly: false
             display_results(results)
         elsif choice == 'y'
             puts "Gam Gam isn't a fan of cursing I guess. Fine."
+            puts " "
             results = Game.where family_friendly: true
             display_results(results)
         else
@@ -68,6 +74,7 @@ class Cli
 
     def display_results(games)
         puts "Right. Here you go."
+        puts " "
         games.each do |game|
             puts game.name
             puts "For #{game.players_min}-#{game.players_max} players"
@@ -86,16 +93,20 @@ class Cli
             puts "I gave you options. Pick one."
             pick_a_game
         else
+            system 'clear'
             puts "You chose that one? Interesting... I'm just going to make a note... No, it's not about you and no, you can't see it!"
-            new_review
+            check_for_previous_reviews
         end
     end
-
-    def thumbs_up_or_down
-        puts "Would you recommend this game to others? Just... yes or no."
-        puts "(y) I freakin' LOVE this game!"
-        puts "(n) HOW DARE YOU RECOMMEND THIS GAME TO ANYONE!"
-        response = gets.chomp.downcase
+    def check_for_previous_reviews
+        @review = Review.where player_id: player.id, game_id: board_game.id
+        if review.length == 0
+            new_review
+        else
+            system 'clear'
+            puts "You already reviewed that game. Don't you remember that?"
+            reviews_query
+        end 
     end
 
     def new_review
@@ -108,8 +119,16 @@ class Cli
             puts "I don't know why this is so hard for you. Try again."
             new_review
         end
+        system 'clear'
         puts "Well then my job is done... Wait you're still here? Why?"
         reviews_query
+    end
+    
+    def thumbs_up_or_down
+        puts "Would you recommend this game to others? Just... yes or no."
+        puts "(y) I freakin' LOVE this game!"
+        puts "(n) HOW DARE YOU RECOMMEND THIS GAME TO ANYONE!"
+        response = gets.chomp.downcase
     end
 
     def reviews_query
@@ -120,7 +139,7 @@ class Cli
         if response == "y"
             see_my_reviews
         elsif response == 'n'
-            puts "Well then what are you still doing here? I've got a lot to do y'know. Shoo!"
+            end_session
         else
             puts "If I cared about you, I'd probably be worried about this. Try again."
             reviews_query
@@ -130,7 +149,9 @@ class Cli
     def see_my_reviews
         player.reviews.each do |review|
             puts "I would recommend #{review.game.name} to others: #{review.rating}"
+            puts " "
         end
+        puts "Yeah, that's how you reviewed that game..."
         puts "Why do you have that look? You're going to make me do more work aren't you..."
             change_your_mind
     end
@@ -144,7 +165,7 @@ class Cli
         if response == "y"
             pick_a_review
         elsif response == "n"
-            puts "Well then what are you still doing here? I've got a lot to do y'know. Shoo!"
+            end_session
         else
             puts "If I cared about you, I'd probably be worried about this. Try again."
             change_your_mind
@@ -165,11 +186,12 @@ class Cli
     end
 
     def find_review_that_needs_changing
-        @review = Review.where(player_id: player.id).where game_id: board_game.id
-        if review == nil
+        @review = Review.where player_id: player.id, game_id: board_game.id
+        if review.length == 0
             puts "You didn't even... Just... Try again."
             pick_a_review
         else
+            system 'clear'
             puts "Ok then... "
             change_review
         end 
@@ -185,5 +207,10 @@ class Cli
             puts "I don't know why this is so hard for you. Try again."
             change_review
         end
+        end_session
+    end
+
+    def end_session
+        puts "Well then what are you still doing here? I've got a lot to do y'know. Shoo!"
     end
 end

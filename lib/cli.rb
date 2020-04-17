@@ -166,7 +166,6 @@ class Cli
 
     def find_review_that_needs_changing
         @review = Review.where(player_id: player.id).where game_id: board_game.id
-        binding.pry
         if review == nil
             puts "You didn't even... Just... Try again."
             pick_a_review

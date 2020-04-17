@@ -1,19 +1,21 @@
 require 'pry'
 class Cli
-    attr_reader :player
+    attr_reader :player, :board_game, :review
 
     def welcome
         puts "Do I know you?"
-        puts "(yes/no)"
+        puts "(y) I thought we were friends!"
+        puts "(n) Not that I know of."
         response = gets.chomp.downcase
+        system 'clear'
         new_or_returning_user(response)
     end
 
     def new_or_returning_user(response)
-        if response == 'no'
+        if response == 'n'
             puts "Well I can't just call you Bob now can I?" 
             set_player
-        elsif response == 'yes'
+        elsif response == 'y'
             puts "Well it's not like you're a celebrity or anything."
             find_player
         else
@@ -28,6 +30,8 @@ class Cli
         puts "I already know three #{first_name}'s. What's your last name?"
         last_name = gets.chomp.downcase.capitalize
         @player = Player.find_or_create_by(name: "#{first_name} #{last_name}")
+        system 'clear'
+        puts "Your name is #{player.name}?! Oh man, your parents didn't like you did they? Speaking of parents..."
         family_vs_adult
     end
 
@@ -37,6 +41,7 @@ class Cli
         puts "Not ringing a bell. What's your last name?"
         last_name = gets.chomp.downcase.capitalize
         @player = Player.find_or_create_by name: "#{first_name} #{last_name}"
+        system 'clear'
         puts "Your name is #{player.name}?! Oh man, your parents didn't like you did they? Speaking of parents..."
         family_vs_adult
     end
@@ -46,24 +51,36 @@ class Cli
         puts "(y) I was born a family man!"
         puts "(n) Who needs family when you have booze?"
         player_choice = gets.chomp.downcase
-        game_options(player_choice)
+        system 'clear'
+        family_friendly_options(player_choice)
     end
 
-    def game_options(choice)
+    def family_friendly_options(choice)
         if choice == 'n'
             puts "So game night has a keg eh? Fair enough."
+            puts " "
             results = Game.where family_friendly: false
             display_results(results)
         elsif choice == 'y'
             puts "Gam Gam isn't a fan of cursing I guess. Fine."
+            puts " "
             results = Game.where family_friendly: true
             display_results(results)
         else
             puts "This isn't rocket science, y'know. Try again."
             family_vs_adult
         end
-        # puts "You have "
-        # refine_further
+    end
+
+    def display_results(games)
+        puts "Right. Here you go."
+        puts " "
+        games.each do |game|
+            puts game.name
+            puts "For #{game.players_min}-#{game.players_max} players"
+            puts game.description
+            puts " "
+        end
         pick_a_game
     end
 
@@ -71,57 +88,129 @@ class Cli
         puts "So what'll it be?"
         puts "Enter the name of the game you want to play."
         response = gets.chomp.downcase.titleize
-        choice = Game.find_by(name: response)
-        
-        play_the_game(choice)
-    end
-
-    def refine_further
-        puts "Really? You want me to do more work? Well you aren't having a game night by yourself are you?"
-        puts "How many people are playing?"
-        puts "a) Just me and a friend."
-        puts "b) There's four of us..."
-        puts "c) Unless Greg shows up, then it's five."
-        puts "d) But Laura's been trying to set Greg up with her friend and ... wait how many people are playing now?"
-        response = gets.chomp.downcase
-        game_options_refined(response)
-    end
-
-    def game_options_refined(response)
-        if response == "a"
-            puts "You have a friend. That's suprising."
-        elsif response == 'b'
-            puts "Ah, the double date for nerds."
-        elsif response == 'c'
-            puts "You and I both know Greg isn't coming."
-        elsif response == 'd'
-            puts "Well that escalated quickly, didn't it."
+        @board_game = Game.find_by(name: response)
+        if board_game == nil
+            puts "I gave you options. Pick one."
+            pick_a_game
         else
-            puts "We've discussed this already. Try again."
-            refine_further
+            system 'clear'
+            puts "You chose that one? Interesting... I'm just going to make a note... No, it's not about you and no, you can't see it!"
+            check_for_previous_reviews
         end
     end
+    def check_for_previous_reviews
+        @review = Review.where player_id: player.id, game_id: board_game.id
+        if review.length == 0
+            new_review
+        else
+            system 'clear'
+            puts "You already reviewed that game. Don't you remember that?"
+            reviews_query
+        end 
+    end
 
-    def display_results(games)
-        puts "Right. Here you go."
-        games.each do |game|
-            puts game.name
+    def new_review
+        response = thumbs_up_or_down 
+        if response == "y"
+            Review.create(rating: true, player_id: player.id, game_id: board_game.id)
+        elsif response == 'n'
+            Review.create(rating: false, player_id: player.id, game_id: board_game.id)
+        else
+            puts "I don't know why this is so hard for you. Try again."
+            new_review
         end
+        system 'clear'
+        puts "Well then my job is done... Wait you're still here? Why?"
+        reviews_query
     end
-
-    def play_the_game
-        puts "You chose that one? Interesting... I'm just going to make a note... No, it's not about you and no, you can't see it!"
-    end
-
+    
     def thumbs_up_or_down
-        puts "Well how else am I going to know if you liked the game? Just... yes or no."
+        puts "Would you recommend this game to others? Just... yes or no."
         puts "(y) I freakin' LOVE this game!"
-        puts "(n) HOW DARE YOU RECOMMEND THIS GAME TO OTHERS!"
+        puts "(n) HOW DARE YOU RECOMMEND THIS GAME TO ANYONE!"
+        response = gets.chomp.downcase
     end
 
+    def reviews_query
+        puts "You want to see all of your recommendations don't you?"
+        puts "(y) Now that you've mentioned it..."
+        puts "(n) Why would I want to do that?"
+        response = gets.chomp.downcase
+        if response == "y"
+            see_my_reviews
+        elsif response == 'n'
+            end_session
+        else
+            puts "If I cared about you, I'd probably be worried about this. Try again."
+            reviews_query
+        end
+    end
+
+    def see_my_reviews
+        player.reviews.each do |review|
+            puts "I would recommend #{review.game.name} to others: #{review.rating}"
+            puts " "
+        end
+        puts "Yeah, that's how you reviewed that game..."
+        puts "Why do you have that look? You're going to make me do more work aren't you..."
+            change_your_mind
+    end
+
+    
     def change_your_mind
         puts "Having second thoughts eh? Yeah, so am I."
         puts "(y) Maybe I was too harsh..."
-        puts "(n) I still hate it. I just wanted to mess with you." 
+        puts "(n) I just wanted to mess with you." 
+        response = gets.chomp.downcase
+        if response == "y"
+            pick_a_review
+        elsif response == "n"
+            end_session
+        else
+            puts "If I cared about you, I'd probably be worried about this. Try again."
+            change_your_mind
+        end
+    end
+
+    def pick_a_review
+        puts "Fine. Which review do you want to change?"
+        puts "<Enter Game>"
+        response = gets.chomp.downcase.titleize
+        @board_game = Game.find_by(name: response)
+        if board_game == nil
+            puts "Seriously? Pick one."
+            pick_a_review
+        else
+            find_review_that_needs_changing
+        end 
+    end
+
+    def find_review_that_needs_changing
+        @review = Review.where player_id: player.id, game_id: board_game.id
+        if review.length == 0
+            puts "You didn't even... Just... Try again."
+            pick_a_review
+        else
+            system 'clear'
+            puts "Ok then... "
+            change_review
+        end 
+    end
+
+    def change_review
+        response = thumbs_up_or_down
+        if response == "y"
+            review.update(rating: true)
+        elsif response == 'n'
+            review.update(rating: false)
+        else
+            puts "I don't know why this is so hard for you. Try again."
+            change_review
+        end
+        end_session
+    end
+
+    def end_session
+        puts "Well then what are you still doing here? I've got a lot to do y'know. Shoo!"
     end
 end
